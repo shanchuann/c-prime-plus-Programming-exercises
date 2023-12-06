@@ -1,0 +1,20 @@
+//chapter 1.13 英寸厘米单位转换，1英寸=2.54厘米，用户输入英寸值，请定义程序目标并设计程序
+/*目标：用户输入英寸值，程序输出厘米值
+ * 1.定义程序目标
+ * 2.设计程序
+ * 用户输入值
+ * int inch;
+ * scanf("%d",&inch);
+ * 程序输出值
+ * printf("%d",inch*2.54);
+ * /
+
+#include<stdio.h>
+int main(void)
+{
+  int inch;
+  printf("Please enter your inch:");
+  scanf("%d",&inch);
+  printf("Your cm is %d",inch*2.54);
+  return 0;
+}
