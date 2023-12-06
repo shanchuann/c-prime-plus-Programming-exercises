@@ -1,0 +1,145 @@
+/* 
+1 用printf打印一行名字
+   用一次printf分别打印名字在两行
+   用两次printf分别打印名字在一行
+   
+#include<stdio.h>
+int main(void)
+{
+    printf("Gustav Mahler\n");
+    printf("Gustav\nMahler\n");
+    printf("Gustav ");
+    printf("Mahler\n");
+    return 0;
+}
+
+2 打印自己的姓名和住址
+
+#include<stdio.h>
+int main(void)
+{
+    printf("Gustav Mahler\n");
+    printf("ameilika\n");
+    return 0;
+}
+
+3 年龄转换天数，并显示两个值
+
+#include<stdio.h>
+int main(void)
+{
+    int year = 18;
+    printf("year = 18,Day = %d",year*365);
+    return 0;
+}
+
+4 生成以下文字
+
+#include<stdio.h>
+int main(void)
+{
+    printf("For he's a jolly good fellow!\n"
+           "For he's a jolly good fellow!\n"
+           "For he's a jolly good fellow!\n"
+           "Which nobody can deny!");
+    return 0;
+}
+
+5 编写程序，生成以下输出
+  Brazil,Russia,India,China
+  India,China
+  Brazil,Russia
+  除main函数，调用两个自定义函数
+  br（）打印Brazil,Russia
+  ic（）打印India,China
+  
+#include<stdio.h>
+void br(void);
+void ic(void);
+int main()
+{
+     br();
+     printf(",");
+     ic();
+     printf("\n");
+     ic();
+     printf(",\n");
+     br();
+    return 0;
+}
+void br(void)
+{
+    printf("Brazil,Russia");
+}
+void ic(void)
+{
+    printf("India,China");
+}
+
+6 定义一个整型变量toes，设置为10
+  计算toes两倍和他的平方
+  打印三个值，分别描述区分
+  
+#include<stdio.h>
+int main()
+{
+    int toes = 10;
+    printf("toes = 10,toes*2 = %d,toes*toes = %d",toes*2,toes*toes);
+    return 0;
+}
+
+7 定义一个函数，调用一次打印一次Smile！
+ 输出Smile！Smile！Smile！
+ Smile！Smile！
+ Smile！
+ 
+#include<stdio.h>
+void smile(void);
+int main()
+{
+    smile(),smile(),smile();
+    printf("\n");
+    smile(),smile();
+    printf("\n");
+    smile();
+    return 0;
+}
+void smile(void)
+{
+    printf("Smile!");
+}
+
+8 定义一个函数,调用one_three函数
+ 在一行打印one
+ 再调用第二个函数two
+ 然后在零一行打印单词three
+ two函数在另一行显示two
+ main函数调用onr_three前打印短语starting now：
+ 调用结束后打印done！
+ 
+#include<stdio.h>
+void one_three(void);
+void two(void);
+int main()
+{
+    printf("starting now:\n");
+    one_three();
+    printf("\n");
+    two();
+    printf("\n");
+    printf("three\n");
+    printf("done!");
+    return 0;
+}
+void one_three(void)
+{
+    printf("one");
+}
+void two(void)
+{
+    printf("two");
+}
+
+
+
+ 
