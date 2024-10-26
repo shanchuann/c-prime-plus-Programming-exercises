@@ -21,15 +21,13 @@ I am a simple computer.
 
 My favorite number is 1 because it is first.
 
-总而言之，结果在意料之中，但是程序中的 `\n` 和 `%d` 是什么?程序中有几行代码看起来有点奇怪。接下来，我们逐行解释这个程序
-
 ![C程序解剖](assrt/C程序解剖.png)
 
 ### 第1遍：快速概要
 
 `#include<stdio.h>` <- 包含另一个文件
 
-该行告诉编译器把 stdio.h 中的内容包含在当前程序中。stdio.h 是 C 编译器软件包的标准部分，它提供键盘输入和屏幕输出的支持。
+预处理操作,引入 stdio.h 头文件,stdio.h 是 C 编译器软件包的标准部分，它提供键盘输入和屏幕输出的支持。
 
 `int main(void)` <- 函数名
 
