@@ -492,3 +492,152 @@ Instead,use a "macro" from inttypes.h:me32 = 45933945
 各种整数类型对大多数软件开发项目而言够用了。然而，面向金融和数学的程序经常使用浮点数。C 语言中的浮点类型有 float、double 和 long double 类型。它们与 FORTRAN 和 Pascal 中的 real 类型一致。前面提到过，浮点类型能表示包括小数在内更大范围的数。浮点数的表示类似于科学记数法(即用小数乘以10的幂来表示数字)。该记数系统常用于表示非常大或非常小的数。
 
 ![表3.3 计数法示例](<assrt/表3.3 计数法示例.png>)
+
+C 标准规定，float 类型必须至少能表示 6 位有效数字，且取值范围至少是 10-37～10+37。前一项规定指 float 类型必须至少精确表示小数点后的6位有效数字，如 33.333333。后一项规定用于方便地表示诸
+
+如太阳质量 ( 2.0e30 千克) 、一个质子的电荷量 ( 1.6e-19 库仑 ) 或国家债务之类的数字。通常，系统储存一个浮点数要占用 32 位。其中8位用于表示指数的值和符号，剩下 24 位用于表示非指数部分 ( 也叫作尾数或有效数 ) 及其符号。
+
+![更多示例](assrt/更多示例.png)
+
+1. 声明浮点型变量
+
+    浮点型变量的声明和初始化方式与整型变量相同，下面是一些例子：
+
+    `float noah,jonah;`
+
+    `double trouble;`
+
+    `float planck=6.63e-34;`
+
+    `long double gnp;`
+
+2. 浮点型常量
+
+    在代码中，可以用多种形式书写浮点型常量。浮点型常量的基本形式是：有符号的数字 ( 包括小数点 ),后面紧跟 e 或 E,最后是一个有符号数表示 10 的指数。下面是两个有效的浮点型常量：
+
+    -1.56E+12
+
+    2.87e-3
+
+    正号可以省略。可以没有小数点 ( 如，2E5 ) 或指数部分 ( 如，19.28 ),但是不能同时省略两者。可以省略小数部分 ( 如，3.E16 ) 或整数部分 ( 如，.45E-6 ) ,但是不能同时省略两者。
+
+    `3.14159`
+
+    `.2`
+
+    `4e16`
+
+    `.8E-5`
+
+    `100.`
+
+    不要在浮点型常量中间加空格：1.56 E+12 ( 错误! ),
+    默认情况下，编译器假定浮点型常量是 double 类型的精度。例如，假设 some 是 float 类型的变量，编写下面的语句：
+
+    `some =4.0*2.0;`
+
+    通常，4.0 和 2.0 被储存为 64 位的 double 类型，使用双精度进行乘法运算，然后将乘积截断成 float 类型的宽度。这样做虽然计算精度更高，但是会减慢程序的运行速度。
+
+    在浮点数后面加上 f 或 F 后缀可覆盖默认设置，编译器会将浮点型常量看作 float 类型，如 2.3f 和 9.11E9F。使用 l 或 L 后缀使得数字成为 long double 类型，如 54.3l 和 4.32L。注意，建议使用 L 后缀，因为字母 l 和数字 1 很容易混淆。没有后缀的浮点型常量是 double 类型。
+
+3. 打印浮点值
+
+    printf() 函数使用 %f 转换说明打印十进制记数法的 float 和 double 类型浮点数，用 %e 打印指数记数法的浮点数。如果系统支持十六进制格式的浮点数，可用 a 和 A 分别代替 e 和 E 。打印 long double 类型要使用 %Lf、%Le 或 %La 转换说明。给那些未在函数原型中显式说明参数类型的函数 ( 如，printf() ) 传递参数时，C 编译器会把 float 类型的值自动转换成 double 类型。
+
+    ```c
+    /*showf_pt.c --以两种方式显示float类型的值*/
+    #include <stdio.h>
+    int main(void)
+    {
+        float aboat = 32000.0;
+        double abet = 2.14e9;
+        long double dip = 5.32e-5;
+
+        printf("%f can be written %e\n",aboat,aboat);
+        //下一行要求编译器支持C99或其中的相关特性
+        printf("And it's %a in hexadecimal,powers of 2 notation\n",aboat);
+        printf("%f can be written %e\n",abet,abet);
+        printf("%Lf can be written %Le\n",dip,dip);
+        return 0;
+    }
+
+    ```
+
+    该程序的输出如下，前提是编译器支持C99/C11:
+
+    32000.000000 can be written 3.200000e+04
+
+    And it's 0x1.f4p+14 in hexadecimal,powers of 2 notation
+
+    2140000000.000000 can be written 2.140000e+09
+
+    0.000053 can be written 5.320000e-05
+
+4. 浮点值的上溢和下溢
+
+    假设系统的最大 float 类型值是 3.4E38,编写如下代码：
+
+    ```c
+    float toobig = 3.4E38*100.0f;
+
+    printf("8e\n",toobig);
+    ```
+
+    这是一个上溢 ( overflow ) 的示例。当计算导致数字过大，超过当前类型能表达的范围时，就会发生上溢。C语言规定，在这种情况下会给 toobig 赋一个表示*无穷大*的特定值，而且 printf() 显示该值为 inf 或 infinity ( 或者具有无穷含义的其他内容 )。
+
+    当除以一个很小的数时，情况更为复杂。回忆一下，float 类型的数以指数和尾数部分来储存。存在这样一个数，它的指数部分是最小值，即由全部可用位表示的最小尾数值。该数字是 float 类型能用全部精度表示的最小数字。现在把它除以2。通常，这个操作会减小指数部分，但是假设的情况中，指数已经是最小值了。所以计算机只好把尾数部分的位向右移，空出第1个二进制位，并丢弃最后一个二进制数。以十进制为例，把一个有 4 位有效数字的数 ( 如，0.1234E-10 ) 除以 10,得到的结果是 0.0123E-10。虽然得到了结果，但是在计算过程中却损失了原末尾有效位上的数字。这种情况叫作下溢 ( underflow )。
+
+    C 语言把损失了类型全精度的浮点值称为低于正常的 ( subnormal ) 浮点值。因此，把最小的正浮点数除以 2 将得到一个低于正常的值。如果除以一个非常大的值，会导致所有的位都为 0。现在，C 库已提供了用于检查计算是否会产生低于正常值的函数。
+
+    还有另一个特殊的浮点值 NaN ( not a number 的缩写 )。例如，给 asin() 函数传递一个值，该函数将返回一个角度，该角度的正弦就是传入函数的值。但是正弦值不能大于 1,因此，如果传入的参数大于 1,该函数的行为是未定义的。在这种情况下，该函数将返回 NaN 值，printf()函数可将其显示为 nan、NaN 或其他类似的内容。
+
+### 复数和虚数类型
+
+许多科学和工程计算都要用到复数和虚数。C99 标准支持复数类型和虚数类型，但是有所保留。一些独立实现，如嵌入式处理器的实现，就不需要使用复数和虚数 ( VCR 芯片就不需要复数 )。一般而言，虚数类型都是可选项。C11 标准把整个复数软件包都作为可选项。
+简而言之，C 语言有 3 种复数类型：
+
+float_Complex、double_Complex 和 long double Complex
+
+例如，float_Complex  类型的变量应包含两个 float 类型的值，分别表示复数的实部和虚部。类似地，C 语言的 3 种虚数类型是
+
+float_Imaginary、double_Imaginary 和 long double _Imaginary
+
+如果包含 complex.h 头文件，便可用 complex 代替 _Complex,用 imaginary 代替_Imaginary,还可以用 I 代替 -1 开根号。
+
+### 类型大小
+
+通过 sizeof 运算符获取数据类型大小(以字节为单位给出指定类型的大小)
+
+```c
+#include <stdio.h>
+int main(void)
+{
+    /*C99为类型大小提供8zd转换说明*/
+    printf("Type int has a size of %zd bytes.\n",sizeof(int));
+    printf("Type char has a size of %zd bytes.\n",sizeof(char));
+    printf("Type long has a size of %zd bytes.\n",sizeof(long));
+    printf("Type long long has a size of %zd bytes.\n",
+    sizeof(long long));
+    printf("Type double has a size of %zd bytes.\n",
+    sizeof(double));
+    printf("Type long double has a size of %zd bytes.\n",
+    sizeof(long double));
+    return 0;
+}
+```
+
+C99 和 Cll 提供 %zd 转换说明匹配 sizeof 的返回类型。一些不支持 C99 和 C11 的编译器可用 %u 或 %lu 代替 %zd。
+
+该程序的输出如下：
+
+Type int has a size of 4 bytes.
+
+Type char has a size of 1 bytes.
+
+Type long has a size of 8 bytes.
+
+Type long long has a size of 8 bytes.
+
+Type double has a size of 8 bytes.
+
+Type long double has a size of 16 bytes.
